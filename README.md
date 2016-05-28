@@ -10,7 +10,7 @@ To create an uber JAR:
     
 Command for running from Maven:
 
-    mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='YOURKEY TRAINING'
+    mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='eran5wbs'
 
     mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='YOURKEY COMPETITION YOURGAMEID'
 

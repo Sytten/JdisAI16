@@ -12,7 +12,7 @@ import com.coveo.blitz.client.dto.GameState.Position;
 /**
  * Example bot
  */
-public class Bot implements SimpleBot {
+public class xsBot implements SimpleBot {
 	private static final Logger logger = LogManager.getLogger(Bot.class);
 
     private BoardParser parser = new BoardParser();
@@ -37,7 +37,39 @@ public class Bot implements SimpleBot {
         // Example pathfinding:
         // BotMove move = pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(0, 0));
 
-        int randomNumber = (int)(Math.random() * 5);
+        int x, y; //destination choisi
+        x = 100000;
+        y = 100000;
+        int shortest = 1000000000;
+        int tempshortest;
+
+        for (int i = 0; i < size; i++) {
+            List<Tile> tilelist = map.get(i);
+                for (int j = 0; j < size; j++) {
+                    Tile tile = tilelist.get(i);
+                    if(tile.getSymbol().equals(Tile.MineNeutral) ||
+                            tile.getSymbol().equals(Tile.MinePlayer1)||
+                            tile.getSymbol().equals(Tile.MinePlayer2) ||
+                            tile.getSymbol().equals(Tile.MinePlayer3) ||
+                            tile.getSymbol().equals(Tile.MinePlayer4)) {
+                            tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(j,i)).size();
+                        if (tempshortest < shortest) {
+                            shortest = tempshortest;
+                            x = j;
+                            y = i;
+                        }
+                    }
+
+                }
+
+        }
+
+        return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x,y));
+
+
+
+
+        /*int randomNumber = (int)(Math.random() * 5);
         switch(randomNumber) {
             case 1:
             	logger.info("Going north");
@@ -54,7 +86,7 @@ public class Bot implements SimpleBot {
             default:
             	logger.info("Going nowhere");
                 return BotMove.STAY;
-        }
+        }*/
     }
 
     @Override
