@@ -12,7 +12,7 @@ import com.coveo.blitz.client.dto.GameState.Position;
 /**
  * Example bot
  */
-public class xsBot implements SimpleBot {
+public class Bot implements SimpleBot {
 	private static final Logger logger = LogManager.getLogger(Bot.class);
 
     private BoardParser parser = new BoardParser();
