@@ -43,15 +43,24 @@ public class Bot implements SimpleBot {
         int shortest = 1000000000;
         int tempshortest;
 
+
         for (int i = 0; i < size; i++) {
             List<Tile> tilelist = map.get(i);
                 for (int j = 0; j < size; j++) {
                     Tile tile = tilelist.get(j);
-                    if(tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                    if((tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
-                            tile.getSymbol().equals(Tile.MinePlayer4.toString())) {
+                            tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
                             tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
+                        if (tempshortest < shortest) {
+                            shortest = tempshortest;
+                            x = i;
+                            y = j;
+                        }
+                    }
+                    else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
                         if (tempshortest < shortest) {
                             shortest = tempshortest;
                             x = i;
