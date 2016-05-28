@@ -32,8 +32,8 @@ public class Pathfinder {
      * mine)
      * @return direction to take to follow the optimal path
      */
-    public BotMove navigateTowards(Position source, Position destination) {
-        List<Position> path = shortestPath(source, destination);
+    public BotMove navigateTowards(Position source, Position destination, boolean spikeEnabled) {
+        List<Position> path = shortestPath(source, destination, spikeEnabled);
         if (!path.isEmpty()) return directionTowards(source, path.get(0));
         else return BotMove.STAY;
     }
@@ -48,7 +48,7 @@ public class Pathfinder {
      * mine)
      * @return list of positions to go to in order to reach the destination
      */
-    public List<Position> shortestPath(Position source, Position destination) {
+    public List<Position> shortestPath(Position source, Position destination, boolean spikeEnabled) {
         Set<Position> nodes = new HashSet<Position>();
         nodes.add(source);
 
@@ -75,7 +75,7 @@ public class Pathfinder {
             }
 
             for (Position v : neighbors ) {
-                if (isPassable(v) && !distances.containsKey(v)) {
+                if (isPassable(v, spikeEnabled) && !distances.containsKey(v)) {
                     distances.put(v, distances.get(u) + 1);
                     predecessors.put(v, u);
                     nodes.add(v);
@@ -110,11 +110,17 @@ public class Pathfinder {
         return neighbors;
     }
 
-    private boolean isPassable(Position pos) {
+    private boolean isPassable(Position pos, boolean spikeEnabled) {
         Tile t = this.map.get(pos.getX()).get(pos.getY());
-        return t == Tile.Air || t == Tile.Spikes ||
+
+        if (spikeEnabled)
+            return t == Tile.Air || t == Tile.Spikes ||
                t == Tile.Hero1 || t == Tile.Hero2 ||
                t == Tile.Hero3 || t == Tile.Hero4;
+        else
+            return t == Tile.Air ||
+                    t == Tile.Hero1 || t == Tile.Hero2 ||
+                    t == Tile.Hero3 || t == Tile.Hero4;
     }
 
     private BotMove directionTowards(Position source, Position destination) {

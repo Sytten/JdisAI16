@@ -46,11 +46,14 @@ public class Bot implements SimpleBot {
         shortest = 1000000000;
 
         if (takingBeer) {
-            System.out.println(gameState.getHero().getLife());
             if ((gameState.getHero().getLife() + 3) >= 100) {
                 takingBeer = false;
             }
-            return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y));
+
+            if (gameState.getHero().getLife() < 20)
+                return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), false);
+
+            return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), true);
         }
 
 
@@ -63,7 +66,10 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                    if (gameState.getHero().getLife() < 20)
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
+                    else
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
                     if (tempshortest < shortest) {
                         shortest = tempshortest;
                         x = i;
@@ -73,7 +79,10 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                    if (gameState.getHero().getLife() < 20)
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
+                    else
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
                     if (tempshortest < shortest) {
                         shortest = tempshortest;
                         x = i;
@@ -83,7 +92,10 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                    if (gameState.getHero().getLife() < 20)
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
+                    else
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
                     if (tempshortest < shortest) {
                         shortest = tempshortest;
                         x = i;
@@ -93,14 +105,20 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
-                    tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                    if (gameState.getHero().getLife() < 20)
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
+                    else
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
                     if (tempshortest < shortest) {
                         shortest = tempshortest;
                         x = i;
                         y = j;
                     }
                 } else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
-                    tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                    if (gameState.getHero().getLife() < 20)
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
+                    else
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
                     if (tempshortest < shortest) {
                         shortest = tempshortest;
                         x = i;
@@ -112,29 +130,10 @@ public class Bot implements SimpleBot {
 
         }
 
-        return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y));
+        if (gameState.getHero().getLife() < 20)
+            return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), false);
 
-
-
-
-        /*int randomNumber = (int)(Math.random() * 5);
-        switch(randomNumber) {
-            case 1:
-            	logger.info("Going north");
-                return BotMove.NORTH;
-            case 2:
-            	logger.info("Going south");
-                return BotMove.SOUTH;
-            case 3:
-            	logger.info("Going east");
-                return BotMove.EAST;
-            case 4:
-            	logger.info("Going west");
-                return BotMove.WEST;
-            default:
-            	logger.info("Going nowhere");
-                return BotMove.STAY;
-        }*/
+        return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), true);
     }
 
     @Override
