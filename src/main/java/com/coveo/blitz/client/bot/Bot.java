@@ -103,8 +103,22 @@ public class Bot implements SimpleBot {
         if (!takingBeer) {
             nearMines.sort(new ComparatorPosition(gameState.getHero(), pathfinder));
 
-            x = nearMines.get(0).getX();
-            y = nearMines.get(0).getY();
+            if (!map.get(nearMines.get(0).getX()).get(nearMines.get(1).getY()).getSymbol().equals(Tile.MineNeutral.toString())) {
+                x = nearMines.get(0).getX();
+                y = nearMines.get(0).getY();
+            } else if (!map.get(nearMines.get(1).getX()).get(nearMines.get(1).getY()).getSymbol().equals(Tile.MineNeutral.toString())
+                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(1), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 6) {
+                x = nearMines.get(1).getX();
+                y = nearMines.get(1).getY();
+            } else if (!map.get(nearMines.get(2).getX()).get(nearMines.get(2).getY()).getSymbol().equals(Tile.MineNeutral.toString())
+                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(2), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 6) {
+                x = nearMines.get(2).getX();
+                y = nearMines.get(2).getY();
+            } else {
+                x = nearMines.get(0).getX();
+                y = nearMines.get(0).getY();
+            }
+
         }
 
         if (gameState.getHero().getLife() < 15)
