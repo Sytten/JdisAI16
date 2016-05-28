@@ -42,13 +42,20 @@ public class Bot implements SimpleBot {
         y = 100000;
         int shortest = 1000000000;
         int tempshortest;
-
+        boolean takingBeer = false;
+        
 
         for (int i = 0; i < size; i++) {
             List<Tile> tilelist = map.get(i);
                 for (int j = 0; j < size; j++) {
                     Tile tile = tilelist.get(j);
-                    if((tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                    if(takingBeer) {
+                        if((gameState.getHero().getLife() + 25) >= 100) {
+                            takingBeer = false;
+                        }
+                        return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x,y));
+                    }
+                    if(gameState.getHero().getId() == 1 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
@@ -59,7 +66,10 @@ public class Bot implements SimpleBot {
                             y = j;
                         }
                     }
-                    else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
+                    else if(gameState.getHero().getId() == 2 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
                         tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
                         if (tempshortest < shortest) {
                             shortest = tempshortest;
@@ -67,7 +77,36 @@ public class Bot implements SimpleBot {
                             y = j;
                         }
                     }
-
+                    else if(gameState.getHero().getId() == 3 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
+                        if (tempshortest < shortest) {
+                            shortest = tempshortest;
+                            x = i;
+                            y = j;
+                        }
+                    }
+                    else if(gameState.getHero().getId() == 4 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
+                        if (tempshortest < shortest) {
+                            shortest = tempshortest;
+                            x = i;
+                            y = j;
+                        }
+                    }
+                    else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
+                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j)).size();
+                        if (tempshortest < shortest) {
+                            shortest = tempshortest;
+                            x = i;
+                            y = j;
+                        }
+                    }
                 }
 
         }
