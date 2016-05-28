@@ -17,6 +17,12 @@ public class Bot implements SimpleBot {
 
     private BoardParser parser = new BoardParser();
 
+    int x = 100000;
+    int y = 100000;  
+    int shortest = 1000000000;
+    int tempshortest;
+    boolean takingBeer = false;
+
     @Override
     public BotMove move(GameState gameState) {
     	logger.info(gameState.getHero().getPos().toString());
@@ -37,12 +43,7 @@ public class Bot implements SimpleBot {
         // Example pathfinding:
         // BotMove move = pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(0, 0));
 
-        int x, y; //destination choisi
-        x = 100000;
-        y = 100000;
-        int shortest = 1000000000;
-        int tempshortest;
-        boolean takingBeer = false;
+        shortest = 1000000000;
         
 
         for (int i = 0; i < size; i++) {
@@ -50,12 +51,14 @@ public class Bot implements SimpleBot {
                 for (int j = 0; j < size; j++) {
                     Tile tile = tilelist.get(j);
                     if(takingBeer) {
-                        if((gameState.getHero().getLife() + 25) >= 100) {
+                        System.out.println(gameState.getHero().getLife());
+                        if((gameState.getHero().getLife() +3) >= 100) {
+                            System.out.println("DONE");
                             takingBeer = false;
                         }
                         return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x,y));
                     }
-                    if(gameState.getHero().getId() == 1 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                    else if(gameState.getHero().getId() == 1 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
@@ -106,6 +109,7 @@ public class Bot implements SimpleBot {
                             x = i;
                             y = j;
                         }
+                        takingBeer = true;
                     }
                 }
 
