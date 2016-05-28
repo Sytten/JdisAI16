@@ -12,7 +12,7 @@ Command for running from Maven:
 
     mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='eran5wbs'
 
-    mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='YOURKEY COMPETITION YOURGAMEID'
+    mvn exec:java -Dexec.mainClass='com.coveo.blitz.client.Main' -Dexec.args='eran5wbs COMPETITION YOURGAMEID'
 
 You can run the uber jar directly
 
