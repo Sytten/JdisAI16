@@ -45,20 +45,22 @@ public class Bot implements SimpleBot {
 
         shortest = 1000000000;
         
-
-        for (int i = 0; i < size; i++) {
-            List<Tile> tilelist = map.get(i);
-                for (int j = 0; j < size; j++) {
-                    Tile tile = tilelist.get(j);
-                    if(takingBeer) {
+        if(takingBeer) {
                         System.out.println(gameState.getHero().getLife());
                         if((gameState.getHero().getLife() +3) >= 100) {
                             System.out.println("DONE");
                             takingBeer = false;
                         }
                         return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x,y));
-                    }
-                    else if(gameState.getHero().getId() == 1 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                    }        
+
+
+        for (int i = 0; i < size; i++) {
+            List<Tile> tilelist = map.get(i);
+                for (int j = 0; j < size; j++) {
+                    Tile tile = tilelist.get(j);
+                    
+                    if(gameState.getHero().getId() == 1 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                             tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
