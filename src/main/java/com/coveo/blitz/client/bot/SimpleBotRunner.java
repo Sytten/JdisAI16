@@ -23,6 +23,9 @@ import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 
+import java.awt.Desktop;
+import java.net.URI;
+
 public class SimpleBotRunner implements Callable<GameState>
 {
     private static final Logger logger = LogManager.getLogger(SimpleBotRunner.class);
@@ -70,6 +73,12 @@ public class SimpleBotRunner implements Callable<GameState>
             response = request.execute();
             gameState = response.parseAs(GameState.class);
             logger.info("Game URL: {}", gameState.getViewUrl());
+
+
+            if(Desktop.isDesktopSupported())
+           {
+             Desktop.getDesktop().browse(new URI(gameState.getViewUrl()));
+           }
 
             // Game loop
             while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
