@@ -1,5 +1,6 @@
 package com.coveo.blitz.client.bot;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class Bot implements SimpleBot {
 
     int x = 100000;
     int y = 100000;
+    List<Position> nearMines = new ArrayList<Position>();
     int shortest = 1000000000;
     int tempshortest;
     boolean takingBeer = false;
@@ -44,13 +46,14 @@ public class Bot implements SimpleBot {
         // BotMove move = pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(0, 0));
 
         shortest = 1000000000;
+        nearMines.clear();
 
         if (takingBeer) {
             if ((gameState.getHero().getLife() + 3) >= 100) {
                 takingBeer = false;
             }
 
-            if (gameState.getHero().getLife() < 20)
+            if (gameState.getHero().getLife() < 15)
                 return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), false);
 
             return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), true);
@@ -66,56 +69,24 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    if (gameState.getHero().getLife() < 20)
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
-                    else
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
-                    if (tempshortest < shortest) {
-                        shortest = tempshortest;
-                        x = i;
-                        y = j;
-                    }
+                    nearMines.add(new Position(i, j));
                 } else if (gameState.getHero().getId() == 2 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    if (gameState.getHero().getLife() < 20)
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
-                    else
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
-                    if (tempshortest < shortest) {
-                        shortest = tempshortest;
-                        x = i;
-                        y = j;
-                    }
+                    nearMines.add(new Position(i, j));
                 } else if (gameState.getHero().getId() == 3 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer4.toString())) && gameState.getHero().getLife() > 50) {
-                    if (gameState.getHero().getLife() < 20)
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
-                    else
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
-                    if (tempshortest < shortest) {
-                        shortest = tempshortest;
-                        x = i;
-                        y = j;
-                    }
+                    nearMines.add(new Position(i, j));
                 } else if (gameState.getHero().getId() == 4 && (tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
-                    if (gameState.getHero().getLife() < 20)
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
-                    else
-                        tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
-                    if (tempshortest < shortest) {
-                        shortest = tempshortest;
-                        x = i;
-                        y = j;
-                    }
+                    nearMines.add(new Position(i, j));
                 } else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
-                    if (gameState.getHero().getLife() < 20)
+                    if (gameState.getHero().getLife() < 15)
                         tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
                     else
                         tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), true).size();
@@ -127,10 +98,16 @@ public class Bot implements SimpleBot {
                     takingBeer = true;
                 }
             }
-
         }
 
-        if (gameState.getHero().getLife() < 20)
+        if (!takingBeer) {
+            nearMines.sort(new ComparatorPosition(gameState.getHero(), pathfinder));
+
+            x = nearMines.get(0).getX();
+            y = nearMines.get(0).getY();
+        }
+
+        if (gameState.getHero().getLife() < 15)
             return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), false);
 
         return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), true);
