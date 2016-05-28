@@ -86,13 +86,13 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
                     nearMines.add(new Position(i, j));
                 } else if ((gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString()))
-                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(0).getPos(), true).size() < 4
+                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(0).getPos()) < 4
                         && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 0)
-                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(1).getPos(), true).size() < 4
+                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(1).getPos()) < 4
                         && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 1)
-                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(2).getPos(), true).size() < 4
+                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(2).getPos()) < 4
                         && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 2)
-                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(3).getPos(), true).size() < 4
+                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(3).getPos()) < 4
                         && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 3))
 
                 {
@@ -136,6 +136,10 @@ public class Bot implements SimpleBot {
             return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), false);
 
         return pathfinder.navigateTowards(gameState.getHero().getPos(), new Position(x, y), true);
+    }
+
+    private int distance(Position a1, Position a2) {
+        return (a1.getX() - a2.getX()) * (a1.getX() - a2.getX()) + (a1.getY() - a2.getY()) * (a1.getY() - a2.getY());
     }
 
     @Override
