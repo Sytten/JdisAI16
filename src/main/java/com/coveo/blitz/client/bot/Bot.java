@@ -46,17 +46,16 @@ public class Bot implements SimpleBot {
         for (int i = 0; i < size; i++) {
             List<Tile> tilelist = map.get(i);
                 for (int j = 0; j < size; j++) {
-                    Tile tile = tilelist.get(i);
-                    if(tile.getSymbol().equals(Tile.MineNeutral) ||
-                            tile.getSymbol().equals(Tile.MinePlayer1)||
-                            tile.getSymbol().equals(Tile.MinePlayer2) ||
-                            tile.getSymbol().equals(Tile.MinePlayer3) ||
-                            tile.getSymbol().equals(Tile.MinePlayer4)) {
-                            tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(j,i)).size();
+                    Tile tile = tilelist.get(j);
+                    if(tile.getSymbol().equals(Tile.MineNeutral.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer2.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
+                            tile.getSymbol().equals(Tile.MinePlayer4.toString())) {
+                            tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(),new Position(i,j)).size();
                         if (tempshortest < shortest) {
                             shortest = tempshortest;
-                            x = j;
-                            y = i;
+                            x = i;
+                            y = j;
                         }
                     }
 
