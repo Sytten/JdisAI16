@@ -19,14 +19,18 @@ public class ComparatorPosition implements Comparator<GameState.Position> {
 
     @Override
     public int compare(GameState.Position o1, GameState.Position o2) {
-        if (player.getLife() < 15)
+        if (player.getLife() < 15) {
             if (pathfinder.shortestPath(player.getPos(), o1, false).size() < pathfinder.shortestPath(player.getPos(), o2, false).size())
                 return -1;
             else
                 return 1;
-        else if (pathfinder.shortestPath(player.getPos(), o1, false).size() < pathfinder.shortestPath(player.getPos(), o2, true).size())
-            return -1;
-        else
-            return 1;
+        }
+        else {
+            if (pathfinder.shortestPath(player.getPos(), o1, true).size() < pathfinder.shortestPath(player.getPos(), o2, true).size())
+                return -1;
+            else
+                return 1;
+        }
+           
     }
 }
