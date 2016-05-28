@@ -85,7 +85,17 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
                     nearMines.add(new Position(i, j));
-                } else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
+                } else if ((gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString()))
+                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(0).getPos(), true).size() < 4
+                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 0)
+                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(1).getPos(), true).size() < 4
+                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 1)
+                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(2).getPos(), true).size() < 4
+                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 2)
+                        || (pathfinder.shortestPath(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(3).getPos(), true).size() < 4
+                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 3))
+
+                {
                     if (gameState.getHero().getLife() < 15)
                         tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
                     else
@@ -100,6 +110,7 @@ public class Bot implements SimpleBot {
             }
         }
 
+        //gameState.getGame().getHeroes().get(0).getPos();
         if (!takingBeer) {
             nearMines.sort(new ComparatorPosition(gameState.getHero(), pathfinder));
 
@@ -107,11 +118,11 @@ public class Bot implements SimpleBot {
                 x = nearMines.get(0).getX();
                 y = nearMines.get(0).getY();
             } else if (!map.get(nearMines.get(1).getX()).get(nearMines.get(1).getY()).getSymbol().equals(Tile.MineNeutral.toString())
-                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(1), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 5) {
+                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(1), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 3) {
                 x = nearMines.get(1).getX();
                 y = nearMines.get(1).getY();
             } else if (!map.get(nearMines.get(2).getX()).get(nearMines.get(2).getY()).getSymbol().equals(Tile.MineNeutral.toString())
-                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(2), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 5) {
+                    && pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(2), true).size() < pathfinder.shortestPath(gameState.getHero().getPos(), nearMines.get(0), true).size() + 3) {
                 x = nearMines.get(2).getX();
                 y = nearMines.get(2).getY();
             } else {
