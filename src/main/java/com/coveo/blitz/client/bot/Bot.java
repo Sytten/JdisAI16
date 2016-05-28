@@ -85,17 +85,7 @@ public class Bot implements SimpleBot {
                         tile.getSymbol().equals(Tile.MinePlayer3.toString()) ||
                         tile.getSymbol().equals(Tile.MinePlayer1.toString())) && gameState.getHero().getLife() > 50) {
                     nearMines.add(new Position(i, j));
-                } else if ((gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString()))
-                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(0).getPos()) < 4
-                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 0)
-                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(1).getPos()) < 4
-                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 1)
-                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(2).getPos()) < 4
-                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 2)
-                        || (distance(gameState.getHero().getPos(), gameState.getGame().getHeroes().get(3).getPos()) < 4
-                        && gameState.getHero().getLife() <= 75 && gameState.getHero().getId() != 3))
-
-                {
+                } else if (gameState.getHero().getLife() <= 50 && tile.getSymbol().equals(Tile.Tavern.toString())) {
                     if (gameState.getHero().getLife() < 15)
                         tempshortest = pathfinder.shortestPath(gameState.getHero().getPos(), new Position(i, j), false).size();
                     else
